@@ -1,0 +1,26 @@
+{
+  "name": "server-humanoid-robot",
+  "version": "1.0.0",
+  "description": "Server For Humanoid Robot Project which is a part of Final Year Project in Electonics, Communication and Information Engineering course in Thapathali Campus, IOE, TU",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "start-dev": "nodemon app.js"
+  },
+  "author": "Sabin Acharya",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "express": "^4.19.2",
+    "ffmpeg": "^0.0.4",
+    "ffmpeg-static": "^5.2.0",
+    "fluent-ffmpeg": "^2.1.3",
+    "jimp": "^0.22.12",
+    "multer": "^1.4.5-lts.1",
+    "onnxruntime-node": "^1.18.0",
+    "sharp": "^0.33.4"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4"
+  }
+}
