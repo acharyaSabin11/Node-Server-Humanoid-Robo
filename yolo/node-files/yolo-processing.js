@@ -27,7 +27,7 @@ async function prepare_input(buf) {
 }
 
 async function run_model(input) {
-    const model = await ort.InferenceSession.create("best.onnx");   // To create the model from the points values(as like from pt values in ultralytics YOLO)
+    const model = await ort.InferenceSession.create("./yolo/node-files/best.onnx");   // To create the model from the points values(as like from pt values in ultralytics YOLO)
     input = new ort.Tensor(Float32Array.from(input), [1, 3, 640, 640]); //Creating tensor type from the input array as like in python.
     const outputs = await model.run({ images: input }); //Passing the image onto the model for prediction
     return outputs["output0"].data; //returning the output data from the model. return array of dimention (1,5, 8400) which is in js a flat array of size 1*5*8400
@@ -76,7 +76,8 @@ async function process_output(output, img_width, img_height) {
 
         let class_id = 0;
         const label = yolo_classes[class_id];
-        boxes.push([x1, y1, x2, y2, label, prob]);
+        // boxes.push([x1, y1, x2, y2, label, prob]);
+        boxes.push([x1, y1, w, h, label, prob]);
         // for (let col = 4; col < 5; col++) {
         //     if (output[8400 * col + index] > prob) {
         //         prob = output[8400 * col + index];
@@ -85,7 +86,7 @@ async function process_output(output, img_width, img_height) {
         // }
     }
     boxes = boxes.sort((box1, box2) => box2[5] - box1[5])
-    boxes = boxes.filter(box => box[5] > 0.4)
+    boxes = boxes.filter(box => box[5] > 0.7)
     const result = [];
     while (boxes.length > 0) {
         result.push(boxes[0]);

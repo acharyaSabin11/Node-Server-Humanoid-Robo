@@ -11,6 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.20.2",
+    "canvas": "^2.11.2",
     "express": "^4.19.2",
     "ffmpeg": "^0.0.4",
     "ffmpeg-static": "^5.2.0",

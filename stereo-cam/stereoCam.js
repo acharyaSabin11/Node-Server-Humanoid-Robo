@@ -12,7 +12,7 @@ const videoUrl1 = 'http://192.168.254.14:81/stream';
 const videoUrl2 = 'http://192.168.254.15:81/stream';
 
 
-const frameRate = 1; // Extract 1 frame per second
+const frameRate = 20; // Extract 1 frame per second
 const frameDir = './frames';
 
 
@@ -47,7 +47,6 @@ function stopProcess(processnumber) {
 
 function startStreaming1(frameSreamPipeline) {
 
-    let frameNumber = 0;
     if (ffmpegProcess1) {
         console.log('FFmpeg process is already running');
         return;
@@ -135,24 +134,6 @@ function stopStreaming2() {
         console.log('No FFmpeg process is running');
     }
 }
-
-
-// console.log('Type "start" to begin streaming, "stop" to end streaming, or "exit" to quit:');
-// rl.on('line', (input) => {
-//     if (input === 'start') {
-//         startStreaming(ffmpegProcess1, videoUrl1);
-//         startStreaming(ffmpegProcess2, videoUrl2);
-//     } else if (input === 'stop') {
-//         stopStreaming(ffmpegProcess1);
-//         stopStreaming(ffmpegProcess2);
-//     } else if (input === 'exit') {
-//         stopStreaming();
-//         rl.close();
-//         process.exit(0);
-//     } else {
-//         console.log('Unknown command:', input);
-//     }
-// });
 
 module.exports = {
     startProcess,
