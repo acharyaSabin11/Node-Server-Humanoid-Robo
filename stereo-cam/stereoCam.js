@@ -12,15 +12,7 @@ const videoUrl1 = 'http://192.168.254.14:81/stream';
 const videoUrl2 = 'http://192.168.254.15:81/stream';
 
 
-const frameRate = 20; // Extract 1 frame per second
-const frameDir = './frames';
-
-
-
-// Ensure frame directory exists
-if (!fs.existsSync(frameDir)) {
-    fs.mkdirSync(frameDir);
-}
+const frameRate = 10; // Extract 20 frame per second
 
 let ffmpegProcess1, ffmpegProcess2;
 

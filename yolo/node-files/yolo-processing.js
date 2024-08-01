@@ -77,7 +77,7 @@ async function process_output(output, img_width, img_height) {
         let class_id = 0;
         const label = yolo_classes[class_id];
         // boxes.push([x1, y1, x2, y2, label, prob]);
-        boxes.push([x1, y1, w, h, label, prob]);
+        boxes.push([x1, y1, x2, y2, label, prob]);
         // for (let col = 4; col < 5; col++) {
         //     if (output[8400 * col + index] > prob) {
         //         prob = output[8400 * col + index];
@@ -86,7 +86,7 @@ async function process_output(output, img_width, img_height) {
         // }
     }
     boxes = boxes.sort((box1, box2) => box2[5] - box1[5])
-    boxes = boxes.filter(box => box[5] > 0.7)
+    boxes = boxes.filter(box => box[5] > 0.8)
     const result = [];
     while (boxes.length > 0) {
         result.push(boxes[0]);

@@ -16,11 +16,50 @@ defineHandlers();
 
 const filePath = './frames/frames_info.txt'
 
+//? Only required for saving images.
+//Defining frame directory path
+const frameDir = './frames'
+// Ensure frame directory exists
+if (!fs.existsSync(frameDir)) {
+    fs.mkdirSync(frameDir);
+}
+let frameNumber1 = 0;
+let frameNumber2 = 0;
+
 let buffer1, buffer2;
 let showBoundingBoxes = false;
 
 let stream1Status;
 let stream2Status;
+
+router.get('/distance', async (req, res, next) => {
+    let image1;
+    let image2;
+    let boundingBoxes1 = [];
+    let boundingBoxes2 = [];
+    let present = false;
+    // TAKING AVERAGE FROM 5 IMAGE FRAMES
+    for (let i = 0; i < 5; i++) {
+        image1 = buffer1;
+        image2 = buffer2;
+        let bb1 = await YOLO.getBoundingBoxes(image1);
+        let bb2 = await YOLO.getBoundingBoxes(image2);
+        if (bb1.isEmpty || bb2.isEmpty) {
+            continue;
+        }
+        boundingBoxes1.push(bb1);
+        boundingBoxes2.push(bb2);
+    }
+
+    if (!(boundingBoxes1.isEmpty || boundingBoxes2.isEmpty)) {
+        present = true;
+    }
+
+    const distance = calcDistance(boundingBoxes1, boundingBoxes2);
+    res.setHeader('Content-Type', 'application/json')
+    res.send({ "Distance": distance, "Object": present })
+})
+
 
 router.post('/', async (req, res, next) => {
     body = req.body;
@@ -63,9 +102,16 @@ router.get('/stream1', async (req, res, next) => {
     });
 
     outputStream1.on('data', async (data) => {
-        res.write(`--frame\r\nContent-Type: image/jpeg\r\nContent-Length: ${data.length}\r\n\r\n`);
-        res.write(data);
-        res.write('\r\n');
+        buf = Buffer.concat([Buffer.from(`--frame\r\nContent-Type: image/jpeg\r\nContent-Length: ${data.length}\r\n\r\n`), data, Buffer.from('\r\n')])
+        res.write(buf);
+        // res.write(`--frame\r\nContent-Type: image/jpeg\r\nContent-Length: ${data.length}\r\n\r\n`);
+        // res.write(data);
+        // res.write('\r\n');
+        // console.log(data[0]);
+        // console.log(data[1]);
+        // console.log(data[data.length - 2]);
+        // console.log(data[data.length - 1]);
+        // res.write(data);
     });
 
     req.on('close', () => {
@@ -84,9 +130,8 @@ router.get('/stream2', async (req, res, next) => {
     });
 
     outputStream2.on('data', async (data) => {
-        res.write(`--frame\r\nContent-Type: image/jpeg\r\nContent-Length: ${data.length}\r\n\r\n`);
-        res.write(data);
-        res.write('\r\n');
+        buf = Buffer.concat([Buffer.from(`--frame\r\nContent-Type: image/jpeg\r\nContent-Length: ${data.length}\r\n\r\n`), data, Buffer.from('\r\n')])
+        res.write(buf);
     });
 
     req.on('close', () => {
@@ -99,12 +144,14 @@ router.get('/stream2', async (req, res, next) => {
 function defineHandlers() {
     frameStream1.on('data', async (data) => {
         try {
-            console.log('Hello1');
+            // Code for streaming
+            console.log('Frame 1 Received');
             buffer1 = data;
             if (!showBoundingBoxes) {
                 outputStream1.write(data);
             } else {
                 result = await YOLO.getBoundingBoxes(data);
+                // fs.appendFile(filePath, `Frame Stream 1 Bounding Box: ${result.toString()}\n`);
                 if (result.length === 0) {
                     outputStream1.write(data);
                 } else {
@@ -117,6 +164,16 @@ function defineHandlers() {
                     });
                 }
             }
+
+            // // Code to save the streamed image
+            // frameNumber1++;
+            // const image = await Jimp.read(data);
+            // // console.log('Processed frame:', image.bitmap.width, 'x', image.bitmap.height);
+            // // console.log(typeof image)
+            // // Save the image to a file
+            // const fileName = `${frameDir}/left_${frameNumber1}.jpg`;
+            // image.write(fileName);
+            // console.log('Saved frame:', fileName);
         } catch (err) {
             console.error('Error processing frame1:', err.message);
         }
@@ -128,12 +185,14 @@ function defineHandlers() {
 
     frameStream2.on('data', async (data) => {
         try {
-            console.log('Hello2');
+            // Code for streaming
+            console.log('Frame 2 Received');
             buffer2 = data;
             if (!showBoundingBoxes) {
                 outputStream2.write(data);
             } else {
                 result = await YOLO.getBoundingBoxes(data);
+                // fs.appendFile(filePath, `Frame Stream 2 Bounding Box: ${result.toString()}\n`);
                 if (result.length === 0 || showBoundingBoxes === false) {
                     outputStream2.write(data);
                 } else {
@@ -146,6 +205,16 @@ function defineHandlers() {
                     });
                 }
             }
+
+            // // Code to save the streamed image
+            // frameNumber2++;
+            // const image = await Jimp.read(data);
+            // // console.log('Processed frame:', image.bitmap.width, 'x', image.bitmap.height);
+            // // console.log(typeof image)
+            // // Save the image to a file
+            // const fileName = `${frameDir}/right_${frameNumber2}.jpg`;
+            // image.write(fileName);
+            // console.log('Saved frame:', fileName);
 
         } catch (err) {
             console.error('Error processing frame2:', err.message);
@@ -180,10 +249,10 @@ async function createBoundingBoxes(imageData, boundingBoxes) {
     // });
 
     const boxColor = Jimp.cssColorToHex('#00FF00');
-    x = box[0]
-    y = box[1]
-    width = box[2]
-    height = box[3]
+    x1 = box[0]
+    y1 = box[1]
+    x2 = box[2]
+    y2 = box[3]
     label = box[4]
     probability = box[5]
     const drawLine = (x1, y1, x2, y2) => {
@@ -194,11 +263,10 @@ async function createBoundingBoxes(imageData, boundingBoxes) {
         }
     };
     // Top and bottom edges
-    drawLine(x, y, x + width, y);
-    drawLine(x, y + height, x + width, y + height);
-    // Left and right edges
-    drawLine(x, y, x, y + height);
-    drawLine(x + width, y, x + width, y + height);
+    drawLine(x1, y1, x2, y1);
+    drawLine(x1, y1, x1, y2);
+    drawLine(x2, y1, x2, y2);
+    drawLine(x1, y2, x2, y2);
 
     // // Load a font
     // Jimp.loadFont(Jimp.FONT_SANS_16_BLACK).then(font => {
@@ -212,7 +280,7 @@ async function createBoundingBoxes(imageData, boundingBoxes) {
     //     });
     // });
 
-    const timestamp = Date.now();
+    // const timestamp = Date.now();
     // fs.writeFileSync(`frames/img${timestamp}.png`, buffer);
     // Save the image to a file
     // image.write(`frames/img${timestamp}.png`, (err) => {
@@ -221,4 +289,33 @@ async function createBoundingBoxes(imageData, boundingBoxes) {
     // });
     return image;
     // console.log(typeof image)
+}
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function calcDistance(boundingBoxes1, boundingBoxes2) {
+    const f = 3 //need to update this later
+    const tanTheta = 0.4 //need to update this later
+    let iteration = boundingBoxes1.length
+    let sumDistances = 0;   //sums the distance for each 5 different distances and to take average at last.
+    const N = 480   // Width of Full Image in Pixels
+    const Ds = 4.75 // Distance between separation of two cameras(in cm)
+    let distance = 0;
+    for (let i = 0; i < iteration; i++) {
+        let box1 = boundingBoxes1[i];
+        let box2 = boundingBoxes2[i];
+
+        let pixelShift1 = [box1[0] - box2[0]]
+        let pixelShift2 = [box1[2] - box2[2]]
+
+        let p = (pixelShift1 + pixelShift2) / 2
+
+        distance = f + (N * Dc) / (2 * p * tanTheta)
+        sumDistances += distance;
+    }
+
+    distance = sumDistances / iteration
+    return distance
 }
