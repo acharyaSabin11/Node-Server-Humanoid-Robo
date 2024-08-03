@@ -187,16 +187,31 @@ function callibrateAndSaveBoundingBoxes(body, res) {
         //Callibrate and save distances.
         let d1 = jsonObj.callibrationDistance1;
         let d2 = jsonObj.callibrationDistance2;
+        console.log('Distance1:', d1);
+        console.log('Distance2:', d2);
+        console.log(jsonObj);
+        console.log(jsonObj.boundingBoxes1['cam-left']);
         let avgCenterLeft1 = avgCenterCalculator(jsonObj.boundingBoxes1['cam-left']);
         let avgCenterRight1 = avgCenterCalculator(jsonObj.boundingBoxes1['cam-right']);
+        console.log('AvgCenterLeft1:', avgCenterLeft1);
+        console.log('AvgCenterRight1:', avgCenterRight1);
         let p1 = Math.abs(avgCenterLeft1 - avgCenterRight1);
         let avgCenterLeft2 = avgCenterCalculator(jsonObj.boundingBoxes2['cam-left']);
         let avgCenterRight2 = avgCenterCalculator(jsonObj.boundingBoxes2['cam-right']);
+        console.log('AvgCenterLeft2:', avgCenterLeft2);
+        console.log('AvgCenterRight2:', avgCenterRight2);
         let p2 = Math.abs(avgCenterLeft2 - avgCenterRight2);
+
+        console.log('P1:', p1);
+        console.log('P2:', p2);
+        console.log('N:', N);
+        console.log('dc:', dc);
         let callibratedJson = {}
         if (p1 != 0 && p2 != 0) {
-            let tantheta = ((N * dc) / (d1 - d2))(1 / p1 - 1 / p2);
-            let focal = d1 - (N * dc) / (2 * p1(tantheta));
+            let tantheta = ((N * dc) / (d1 - d2)) * (1 / p1 - 1 / p2);
+            console.log('TanTheta:', tantheta);
+            let focal = d1 - (N * dc) / (2 * p1 * tantheta);
+            console.log('focal', focal);
 
             callibratedJson = {
                 'tantheta': tantheta,
@@ -223,10 +238,15 @@ function avgCenterCalculator(list) {
     let counter = 0;
     let sum = 0;
     let shift = 0;
-    for (i in list) {
+    for (let i of list) {
         if (i.label != 'No Object') {
-            sum += (i.x2 + i.x1);
+            console.log('Working');
+            sum += (i.x2 + i.x1) / 2;
             counter++;
+            console.log(i)
+            console.log(i)
+        } else {
+            console.log('Not Working')
         }
     }
     if (counter != 0) {

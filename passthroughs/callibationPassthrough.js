@@ -42,6 +42,7 @@ callibrationStream2.on('data', async (data) => {
     // Calculate and save Bounding Boxes for 5 Images.
     if (counter2 < 5) {
         counter2++;
+        console.log(counter2);
         let BB = await YOLO.getBoundingBoxes(data);
         BB = BB[0];
         if (!BB) {
