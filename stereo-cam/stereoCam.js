@@ -1,24 +1,22 @@
 const ffmpeg = require('fluent-ffmpeg');
 const ffmpegPath = require('ffmpeg-static');
-const sharp = require('sharp'); //for image creation for 
-const fs = require('fs');
-const path = require('path');
-const Jimp = require('jimp');
-const { PassThrough } = require('stream');
-
+const { config } = require('./../variables/variables')
 
 //Urls where the video is being hosted by the ESP32-CAM server.
 const videoUrl1 = 'http://192.168.254.14:81/stream';
 const videoUrl2 = 'http://192.168.254.15:81/stream';
 
 
-const frameRate = 10; // Extract 20 frame per second
 
+// Two processes to capture the data from 2 ESP32-CAMs.
 let ffmpegProcess1, ffmpegProcess2;
 
+// To find the locally installed ffmpeg runtime on the computer. (Make sure it is installed and set up correctly in environment variables)
 ffmpeg.setFfmpegPath(ffmpegPath);
 
 
+//? *****************************************These function will be invoked from other modules***********************************************
+// These functions allow to start two streams individually
 function startProcess(processnumber, frameSreamPipeline) {
     if (processnumber === 1) {
         startStreaming1(frameSreamPipeline);
@@ -28,6 +26,7 @@ function startProcess(processnumber, frameSreamPipeline) {
     }
 }
 
+// These functions allow to stop two streams individually
 function stopProcess(processnumber) {
     if (processnumber === 1) {
         stopStreaming1();
@@ -36,13 +35,19 @@ function stopProcess(processnumber) {
         stopStreaming2();
     }
 }
+//? *****************************************These function will be invoked from other modules***********************************************
 
+
+
+//* *****************************************These functions are used by the above functions*************************************************
+// Function to start first Stream.
 function startStreaming1(frameSreamPipeline) {
-
+    //If already running, don't instantiate
     if (ffmpegProcess1) {
         console.log('FFmpeg process is already running');
         return;
     }
+    // If not running, instantiate the process.
     ffmpegProcess1 = ffmpeg(videoUrl1)
         .on('start', () => {
             console.log('FFmpeg process started');
@@ -59,21 +64,23 @@ function startStreaming1(frameSreamPipeline) {
             ffmpegProcess1 = null;
         })
         .outputOptions([
-            `-vf fps=${frameRate}`,
+            `-vf fps=${config.frameRate}`,
             '-f image2pipe',
             '-vcodec mjpeg'
-        ]);
+        ]); //Setting framerate for retrieval of images and type of image to be jpeg.
 
-    ffmpegProcess1.pipe(frameSreamPipeline);
+    //Piping the images to the another stream for data manipulation. This pipeline will be provided from the part where the stream is require(here from flutter control router)
+    ffmpegProcess1.pipe(frameSreamPipeline, { end: false });    // end : false ; makes the framePipeline not end when ffmpeg process is killed.
 }
 
+// Function to start second Stream.
 function startStreaming2(frameSreamPipeline) {
-    frameStream2 = new PassThrough();
+    //If already running, don't instantiate
     if (ffmpegProcess2) {
         console.log('FFmpeg process is already running');
         return;
     }
-
+    // If not running, instantiate the process.
     ffmpegProcess2 = ffmpeg(videoUrl2)
         .on('start', () => {
             console.log('FFmpeg process started');
@@ -89,26 +96,19 @@ function startStreaming2(frameSreamPipeline) {
             console.log('FFmpeg process ended');
             ffmpegProcess2 = null;
         }).outputOptions([
-            `-vf fps=${frameRate}`,
+            `-vf fps=${config.frameRate}`,
             '-f image2pipe',
             '-vcodec mjpeg'
-        ]);
+        ]); //Setting framerate for retrieval of images and type of image to be jpeg.
 
-    ffmpegProcess2.pipe(frameSreamPipeline);
-
-    // .outputOptions([
-    //     `-vf fps=${frameRate}`,
-    //     `-qscale:v 2`
-    // ])
-    // .output(path.join(frameDir, `Proc2-%04d.jpg`))
-    // .run();
-
-
-
+    //Piping the images to the another stream for data manipulation. This pipeline will be provided from the part where the stream is require(here from flutter control router)
+    ffmpegProcess2.pipe(frameSreamPipeline, { end: false });    // end : false ; makes the framePipeline not end when ffmpeg process is killed.
 }
 
+// Function to stop first Stream.
 function stopStreaming1() {
     if (ffmpegProcess1) {
+        //Kill process and set the process variable to null.
         ffmpegProcess1.kill('SIGKILL');
         console.log('FFmpeg process stopped');
         ffmpegProcess1 = null;
@@ -117,8 +117,10 @@ function stopStreaming1() {
     }
 }
 
+// Function to stop second Stream.
 function stopStreaming2() {
     if (ffmpegProcess2) {
+        //Kill process and set the process variable to null.
         ffmpegProcess2.kill('SIGKILL');
         console.log('FFmpeg process stopped');
         ffmpegProcess2 = null;
@@ -126,12 +128,9 @@ function stopStreaming2() {
         console.log('No FFmpeg process is running');
     }
 }
+//* *****************************************These functions are used by the above functions*************************************************
 
 module.exports = {
     startProcess,
     stopProcess,
-    ffmpegProcess1,
-    ffmpegProcess2,
-    videoUrl1,
-    videoUrl2,
 }
