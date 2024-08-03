@@ -23,7 +23,7 @@ callibrationStream1.on('data', async (data) => {
             firstImages.push({ x1: 0, y1: 0, x2: 0, y2: 0, prob: 0, label: 'No Object' })
         }
         else {
-            firstImages.push({ x1: BB[0] ?? 0, y1: BB[1] ?? 0, x2: BB[2] ?? 0, y2: BB[3] ?? 0, prob: BB[4] ?? 0, label: BB[5] ?? 'No Object' });
+            firstImages.push({ x1: BB[0] ?? 0, y1: BB[1] ?? 0, x2: BB[2] ?? 0, y2: BB[3] ?? 0, label: BB[4] ?? 'No Object', prob: BB[5] ?? 0 });
         }
     } else {
         // Stop Saving
@@ -49,7 +49,7 @@ callibrationStream2.on('data', async (data) => {
             secondImages.push({ x1: 0, y1: 0, x2: 0, y2: 0, prob: 0, label: 'No Object' })
         }
         else {
-            secondImages.push({ x1: BB[0] ?? 0, y1: BB[1] ?? 0, x2: BB[2] ?? 0, y2: BB[3] ?? 0, prob: BB[4] ?? 0, label: BB[5] ?? 'No Object' });
+            secondImages.push({ x1: BB[0] ?? 0, y1: BB[1] ?? 0, x2: BB[2] ?? 0, y2: BB[3] ?? 0, label: BB[4] ?? 'No Object', prob: BB[5] ?? 0 });
         }
     } else {
         config.stream2BoundingBoxesCalculated = true;

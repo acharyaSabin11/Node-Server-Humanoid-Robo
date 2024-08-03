@@ -1,5 +1,3 @@
-const { json } = require("body-parser");
-
 let config = {
     showBoundingBoxes: false,
     frameRate: 10,
@@ -11,11 +9,19 @@ let config = {
     stream1BoundingBoxesCalculated: false,
     stream2BoundingBoxesCalculated: false,
     bothStreamBoundingBoxesCalculated: false,
+    calculateDistance: false,
+    stream1DistanceBoundingBoxesCalculated: false,
+    stream2DistanceBoundingBoxesCalculated: false,
+    bothStreamDistanceBoundingBoxesCalculated: false,
+    showBoundingBoxes: false,
 }
 
-let jsonObj = {}
-let firstImages = []
-let secondImages = []
+let jsonObj = {};
+let firstImages = [];
+let secondImages = [];
+
+let firstBBs = [];
+let secondBBs = [];
 
 
 //* ************************************************************** Setter Functions to Update Values *******************************************************
@@ -42,6 +48,11 @@ function saveBoundingBoxesUpdater(value) {
 function passthroughUpdater(value) {
     config.passthroughSelector = value;
 }
+
+function clearBBs() {
+    firstBBs = []
+    secondBBs = []
+}
 //* ************************************************************** Setter Functions to Update Values *******************************************************
 
 module.exports = {
@@ -54,4 +65,7 @@ module.exports = {
     jsonObj,
     firstImages,
     secondImages,
+    firstBBs,
+    secondBBs,
+    clearBBs,
 }

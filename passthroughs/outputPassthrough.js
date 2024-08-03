@@ -1,7 +1,7 @@
 const { PassThrough } = require('stream');
 const Jimp = require('jimp');
 const YOLO = require('../yolo/node-files/yolo-processing');
-const { showBoundingBoxes } = require('./../variables/variables');
+const { showBoundingBoxes, firstBBs, secondBBs, config } = require('./../variables/variables');
 
 
 let outputStream1 = new PassThrough();
@@ -9,13 +9,34 @@ let outputStream2 = new PassThrough();
 let stream1 = new PassThrough();
 let stream2 = new PassThrough();
 
-let buffer1, buffer2;
+let counter1 = 0;
+let counter2 = 0;
+
+// let buffer1, buffer2;
 
 //* ********************************************Defining Listeners for Passthroughs*******************************************************************
 outputStream1.on('data', async (data) => {
     try {
-        buffer1 = data;
-        if (!showBoundingBoxes) {
+        if (config.calculateDistance) {
+            if (counter1 < 5) {
+                counter1++;
+                let BB = await YOLO.getBoundingBoxes(data);
+                BB = BB[0];
+                if (!BB) {
+                    firstBBs.push({ x1: 0, y1: 0, x2: 0, y2: 0, prob: 0, label: 'No Object' })
+                }
+                else {
+                    firstBBs.push({ x1: BB[0] ?? 0, y1: BB[1] ?? 0, x2: BB[2] ?? 0, y2: BB[3] ?? 0, label: BB[4] ?? 'No Object', prob: BB[5] ?? 0 });
+                }
+            }
+            else {
+                reset();
+                config.stream1DistanceBoundingBoxesCalculated = true;
+            }
+        }
+
+        // buffer1 = data;
+        if (!config.showBoundingBoxes) {
             stream1.write(data);
         } else {
             result = await YOLO.getBoundingBoxes(data);
@@ -43,13 +64,29 @@ outputStream1.on('close', () => { console.log('Output Stream 1 Closed') })
 
 outputStream2.on('data', async (data) => {
     try {
+        if (config.calculateDistance) {
+            if (counter2 < 5) {
+                counter2++;
+                let BB = await YOLO.getBoundingBoxes(data);
+                BB = BB[0];
+                if (!BB) {
+                    secondBBs.push({ x1: 0, y1: 0, x2: 0, y2: 0, prob: 0, label: 'No Object' })
+                }
+                else {
+                    secondBBs.push({ x1: BB[0] ?? 0, y1: BB[1] ?? 0, x2: BB[2] ?? 0, y2: BB[3] ?? 0, label: BB[4] ?? 'No Object', prob: BB[5] ?? 0 });
+                }
+            } else {
+                reset();
+                config.stream2DistanceBoundingBoxesCalculated = true;
+            }
+        }
         buffer2 = data;
-        if (!showBoundingBoxes) {
+        if (!config.showBoundingBoxes) {
             stream2.write(data);
         } else {
             result = await YOLO.getBoundingBoxes(data);
             // fs.appendFile(filePath, `Frame Stream 2 Bounding Box: ${result.toString()}\n`);
-            if (result.length === 0 || showBoundingBoxes === false) {
+            if (result.length === 0) {
                 stream2.write(data);
             } else {
                 const image = await createBoundingBoxes(data, result);
@@ -98,6 +135,18 @@ async function createBoundingBoxes(imageData, boundingBoxes) {
     drawLine(x1, y2, x2, y2);
 
     return image;
+
+}
+
+function reset() {
+    if (config.stream1DistanceBoundingBoxesCalculated && config.stream2DistanceBoundingBoxesCalculated) {
+        config.calculateDistance = false;
+        counter1 = 0;
+        counter2 = 0;
+        config.bothStreamDistanceBoundingBoxesCalculated = true;
+        config.stream1DistanceBoundingBoxesCalculated = false;
+        config.stream2DistanceBoundingBoxesCalculated = false;
+    }
 }
 
 //? ********************************************Helper Functions***************************************************************************************

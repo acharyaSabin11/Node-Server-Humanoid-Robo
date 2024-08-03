@@ -53,7 +53,7 @@ function startStreaming1(frameSreamPipeline) {
             console.log('FFmpeg process started');
         })
         .on('stderr', (stderrLine) => {
-            console.log('FFmpeg stderr form proc 1:', stderrLine);
+            // console.log('FFmpeg stderr form proc 1:', stderrLine);
         })
         .on('error', (err) => {
             console.error('An error occurred:', err.message);
@@ -86,7 +86,7 @@ function startStreaming2(frameSreamPipeline) {
             console.log('FFmpeg process started');
         })
         .on('stderr', (stderrLine) => {
-            console.log('FFmpeg stderr from proc 2:', stderrLine);
+            // console.log('FFmpeg stderr from proc 2:', stderrLine);
         })
         .on('error', (err) => {
             console.error('An error occurred:', err.message);
