@@ -13,8 +13,21 @@ const YOLO = require('./../yolo/node-files/yolo-processing');
 
 let stream1Status;
 let stream2Status;
+const distanceMap = [];
 
 const filePath = './frames/rawCallibration.json'
+
+//Dataset Generation OR Saving the images to a file.
+router.post('/save', (req, res) => {
+    console.log(req.body);
+    if (req.body.save === true) {
+        passthroughUpdater('save');
+    } else if (req.body.save === false) {
+        passthroughUpdater('output');
+    }
+    res.setHeader('Content-Type', 'applicaton/json');
+    res.send({ status: req.body.save });
+})
 
 //Handling the request in callibration end point.
 router.post('/callibration', (req, res) => {
@@ -26,6 +39,7 @@ router.post('/callibration', (req, res) => {
     callibrateAndSaveBoundingBoxes(body, res)
 })
 
+
 router.get('/distance', async (req, res, next) => {
     console.log('Distance Received');
     config.calculateDistance = true;
@@ -34,6 +48,8 @@ router.get('/distance', async (req, res, next) => {
         if (config.bothStreamDistanceBoundingBoxesCalculated) {
             let present = false;
             let distance = 0;
+            console.log('Confidence1', firstBBs[0].prob);
+            console.log('Confidence2', secondBBs[0].prob);
             distance = calcDistance(firstBBs, secondBBs);
             console.log(firstBBs.length);
             firstBBs.splice(0, firstBBs.length);
@@ -42,7 +58,6 @@ router.get('/distance', async (req, res, next) => {
             if (distance > 0) {
                 present = true;
             }
-            console.log(distance);
             res.setHeader('Content-Type', 'application/json');
             res.send({ "Distance": distance, "Object": present });
             clearInterval(intervalFunc);
@@ -227,9 +242,6 @@ function callibrateAndSaveBoundingBoxes(body, res) {
 
     }
 }
-
-
-
 //? *******************************************************Helper Functions******************************************************************************
 
 module.exports = router;

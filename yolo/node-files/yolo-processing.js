@@ -86,7 +86,8 @@ async function process_output(output, img_width, img_height) {
         // }
     }
     boxes = boxes.sort((box1, box2) => box2[5] - box1[5])
-    boxes = boxes.filter(box => box[5] > 0.8)
+    //Setting the confidence to 70 percent.
+    boxes = boxes.filter(box => box[5] > 0.70)
     const result = [];
     while (boxes.length > 0) {
         result.push(boxes[0]);

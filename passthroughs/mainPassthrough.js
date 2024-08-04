@@ -12,12 +12,15 @@ let frameStream2 = new PassThrough();
 frameStream1.on('data', async (data) => {
     switch (config.passthroughSelector) {
         case 'output':
+            console.log('output');
             outputStream1.write(data);
             break;
         case 'save':
+            console.log('save');
             saveImageStream1.write(data);
             break;
         case 'callibration':
+            console.log('callibration');
             callibrationStream1.write(data);
             break;
         default:
