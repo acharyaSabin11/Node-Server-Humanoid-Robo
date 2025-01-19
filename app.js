@@ -82,20 +82,28 @@ wss.on('connection', (ws, req) => {
 
     //Handling message event on each client.
     ws.on('message', (message) => {
-        //Only handling the message request from the ESP 32.
-        ws.send(`Hello ${ws.name} you sent -> ${message}`);
         if (ws.apiKey == apiKeys.ESPClient) {
             console.log('ESP32 is sending message');
             // const jsonSeralizedData = message.toString();
-            // const rawData = JSON.parse(jsonSeralizedData);
-            // const processedData = mapper(rawData);
-            // console.log(rawData);
-            // unityClient.forEach((element) => {
-            //     element.send(JSON.stringify(processedData));
+            // console.log(jsonSeralizedData);
+            // // const rawData = JSON.parse(jsonSeralizedData);
+            // flutterClient.forEach((element) => {
+            //     element.send(jsonSeralizedData);
             // })
         } else if (ws.apiKey == apiKeys.FlutterClient) {
             // unityReady = true;
             console.log('Flutter application is sending message');
+            // console.log(JSON.parse(message.toString()));
+            const object = JSON.parse(message.toString());
+            if (motorAngleMap[Object.keys(object)[0]] === Object.values(object)[0]) return;
+            const response = {
+                'key': Number(Object.keys(object)[0]),
+                'value': Object.values(object)[0]
+            }
+            espClient.forEach((element) => {
+                element.send(JSON.stringify(response));
+            })
+            motorAngleMap[Object.keys(object)[0]] === Object.values(object)[0];
         }
         else {
             ws.send(`You have no messaging permission.`);
@@ -106,4 +114,24 @@ wss.on('connection', (ws, req) => {
     ws.on('close', (code, reason) => {
         console.log(`Connection closed with ${ws.name} with code ${code} and reason ${reason}`);
     });
-})
+});
+
+
+const motorAngleMap = {
+    "1": 0,
+    "2": 0,
+    "3": 0,
+    "4": 0,
+    "5": 0,
+    "6": 0,
+    "7": 0,
+    "8": 0,
+    "9": 0,
+    "10": 0,
+    "11": 0,
+    "12": 0,
+    "13": 0,
+    "14": 0,
+    "15": 0,
+    "16": 0,
+};
