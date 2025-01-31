@@ -85,7 +85,7 @@ router.post('/', async (req, res, next) => {
     if (!(req.body.showBoundingBoxes === null)) {
         config.showBoundingBoxes = req.body.showBoundingBoxes;
     }
-    res.setHeader('Content-Type', 'aplication/json')
+    res.setHeader('Content-Type', 'application/json')
     const statusObj = {
         'Stream1': stream1Status,
         'Stream2': stream2Status,
