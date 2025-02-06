@@ -49,7 +49,7 @@ const clientNames = {
 const walkingFrameData = {
     '0': [
         25.0, 10.0, 0.0,
-        65, -35.0, 0.0,
+        0, -35.0, 0.0,
         0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
         0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
         0.0, 0.0,
@@ -63,14 +63,6 @@ const walkingFrameData = {
         0.0, 0.0,
         0.7
     ],
-    // '2': [
-    //     10.0, 35.0, 0.0,
-    //     10.0, -35.0, 0.0,
-    //     0.0, -10.0, 50, -60.5, 0.0, -12.0,
-    //     0.0, -10.0, 0.0, 0.0, 0.0, -12.0,
-    //     0.0, 0.0,
-    //     0.64
-    // ],
     '2': [
         25.0, 10.0, 0.0,
         65, -35.0, 0.0,
@@ -112,14 +104,6 @@ const walkingFrameData = {
         0.0, 0.0,
         1.5
     ],
-    // '7': [
-    //     10.0, 35.0, 0.0,
-    //     10.0, -35.0, 0.0,
-    //     0.0, 0, 25.5, -29.8, 9.6, 12.0,
-    //     0.0, 0, 1.5, 0.0, 10.0, 12.0,
-    //     0.0, 0.0,
-    //     1.0
-    // ],
     '7': [
         10.0, 35.0, 0.0,
         10.0, -35.0, 0.0,
@@ -128,23 +112,6 @@ const walkingFrameData = {
         0.0, 0.0,
         1.52
     ],
-    // '7': [
-    //     10.0, 35.0, 0.0,
-    //     10.0, -35.0, 0.0,
-    //     0.0, 7, 0.0, 0.0, 0.0, 12.0,
-    //     0.0, 15, 4.8, 0, 0, 40.0,
-    //     0.0, 0.0,
-    //     1.52
-    // ],
-    //This might be used as 8th frame
-    // '8': [
-    //     10.0, 35.0, 0.0,
-    //     10.0, -35.0, 0.0,
-    //     0.0, 15, 0.0, 0.0, 0.0, 12.0,
-    //     0.0, 15, 4.8, -60.5, 29.4, 12.0,
-    //     0.0, 0.0,
-    //     1.52
-    // ],
     '8': [
         10.0, 35.0, 0.0,
         10.0, -35.0, 0.0,
@@ -172,7 +139,7 @@ const walkingFrameData = {
     '11': [
         10.0, 35.0, 0.0,
         10.0, -35.0, 0.0,
-        0.0, 8.0, 1.5, -16.5, 22.7, -10.0,
+        0.0, 8.0, 1.5, -16.5, 27.7, -10.0,
         0.0, 0.0, 15.5, -15.8, 9.6, -10.0,
         0.0, 0.0,
         1.2
@@ -180,16 +147,94 @@ const walkingFrameData = {
     '12': [
         10.0, 35.0, 0.0,
         10.0, -35.0, 0.0,
-        0.0, -8, 1.5, -15.2, 35.7, -10.0,
-        0.0, -15.0, 10, 5, 0, -18.0,
+        0.0, -8, 1.5, -10.2, 15.7, -18.0,
+        0.0, 0.0, 15.5, -15.8, 9.6, -18.0,
+        0.0, 0.0,
+        1.2
+    ],
+    '13': [
+        10.0, 35.0, 0.0,
+        10.0, -35.0, 0.0,
+        0.0, -8, 15.5, -7.2, 0, 0,
+        0.0, -5, 5, -5, 0, -18.0,
+        0.0, 0.0,
+        1.2
+    ],
+    '14': [
+        10.0, 35.0, 0.0,
+        10.0, -35.0, 0.0,
+        0.0, -8, 15.5, -7.2, 0, 0,
+        0.0, -5, 5, -5, 0, -18.0,
         0.0, 0.0,
         1.2
     ]
+}
+
+const pickUpSimulationData = {
+    '0': [
+        0.0, 0.0, 0.0,
+        0.0, 0.0, 0.0,
+        0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+        0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+        0.0, 0.0,
+        0.88
+    ],
+    '1': [
+        0.0, 0.0, 0.0,
+        0.0, 0.0, 0.0,
+        0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+        0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+        0.0, 0.0,
+        0.88
+    ],
+    '2': [
+        67.7, 0.0, 0.0,
+        65.8, 0.0, 0.0,
+        0.0, 0.0, 15.9, 15.5, -20.2, 0.0,
+        0.0, 0.0, 15.4, 4.4, -15.7, 0.0,
+        0.0, 0.0,
+        2
+    ],
+    '3': [
+        67.7, 0.0, 55.0,
+        65.8, 0.0, -55.0,
+        0.0, 0.0, 30.9, 15.5, -28.2, 0.0,
+        0.0, 0.0, 30.4, 4.4, -21.7, 0.0,
+        0.0, 0.0,
+        2
+    ],
+    '4': [
+        80.7, 0.0, 55. + 630,
+        80.8, 0.0, -55.0,
+        0.0, 0.0, 15.9, 15.5, -20.2, 0.0,
+        0.0, 0.0, 15.4, 4.4, -15.7, 0.0,
+        0.0, 0.0,
+        1
+    ],
+    '5': [
+        90.0, 0.0, 60.0,
+        90.0, 0.0, -60.0,
+        0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+        0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+        0.0, 0.0,
+        1.0
+    ],
+    '6': [
+        67.7, 0.0, 0.0,
+        65.8, 0.0, 0.0,
+        0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+        0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+        0.0, 0.0,
+        1.0
+    ],
+
+
 }
 // const walkingFrameData = {
 //     '0': [
 //         10.0, 35.0, 0.0,
 //         10.0, -35.0, 0.0,
+//         0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
 //         0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
 //         0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
 //         0.0, 0.0,
@@ -203,14 +248,7 @@ const walkingFrameData = {
 //         0.0, 0.0,
 //         0.4
 //     ],
-//     // '2': [
-//     //     10.0, 35.0, 0.0,
-//     //     10.0, -35.0, 0.0,
-//     //     0.0, -10.0, 50, -60.5, 0.0, -12.0,
-//     //     0.0, -10.0, 0.0, 0.0, 0.0, -12.0,
-//     //     0.0, 0.0,
-//     //     0.64
-//     // ],
+
 //     '2': [
 //         10.0, 35.0, 0.0,
 //         10.0, -35.0, 0.0,
@@ -259,38 +297,6 @@ const walkingFrameData = {
 //         0.0, 0.0,
 //         1.52
 //     ],
-//     // '8': [
-//     //     10.0, 35.0, 0.0,
-//     //     10.0, -35.0, 0.0,
-//     //     0.0, 15, 0.0, 0.0, 0.0, 12.0,
-//     //     0.0, 15, 4.8, -60.5, 29.4, 12.0,
-//     //     0.0, 0.0,
-//     //     1.52
-//     // ],
-//     // '9': [
-//     //     10.0, 35.0, 0.0,
-//     //     10.0, -35.0, 0.0,
-//     //     0.0, 15, 0.0, 0.0, 0.0, 12,
-//     //     0.0, 5, 38.5, -40.2, 2.7, 60,
-//     //     0.0, 0.0,
-//     //     0.72
-//     // ],
-//     // '10': [
-//     //     10.0, 35.0, 0.0,
-//     //     10.0, -35.0, 0.0,
-//     //     0.0, -8.0, 0.0, 0.0, 0.0, 8.5,
-//     //     0.0, -8.0, 38.5, -40.2, 2.7, 8.2,
-//     //     0.0, 0.0,
-//     //     0.72
-//     // ],
-//     // '11': [
-//     //     10.0, 35.0, 0.0,
-//     //     10.0, -35.0, 0.0,
-//     //     0.0, 8.0, 1.5, -16.5, 22.7, -10.0,
-//     //     0.0, 8.0, 25.5, -29.8, 9.6, -10.0,
-//     //     0.0, 0.0,
-//     //     1.2
-//     // ]
 // }
 
 const espClient = [];
@@ -330,13 +336,13 @@ wss.on('connection', (ws, req) => {
     //Handling message event on each client.
     ws.on('message', (message) => {
         if (ws.apiKey == apiKeys.ESPClient) {
-            console.log('ESP32 is sending message');
-            // const jsonSeralizedData = message.toString();
-            // console.log(jsonSeralizedData);
+            // console.log('ESP32 is sending message');
+            const jsonSeralizedData = message.toString();
+            console.log(jsonSeralizedData);
             // // const rawData = JSON.parse(jsonSeralizedData);
-            // flutterClient.forEach((element) => {
-            //     element.send(jsonSeralizedData);
-            // })
+            flutterClient.forEach((element) => {
+                element.send(jsonSeralizedData);
+            })
         } else if (ws.apiKey == apiKeys.FlutterClient) {
             // unityReady = true;
             console.log('Flutter application is sending message');
@@ -374,6 +380,28 @@ wss.on('connection', (ws, req) => {
                 "18": walkingFrameData[frameNumber][18],
                 "19": walkingFrameData[frameNumber][19],
                 "20": walkingFrameData[frameNumber][20],
+                // "0": pickUpSimulationData[frameNumber][0],
+                // "1": pickUpSimulationData[frameNumber][1],
+                // "2": pickUpSimulationData[frameNumber][2],
+                // "3": pickUpSimulationData[frameNumber][3],
+                // "4": pickUpSimulationData[frameNumber][4],
+                // "5": pickUpSimulationData[frameNumber][5],
+                // "6": pickUpSimulationData[frameNumber][6],
+                // "7": pickUpSimulationData[frameNumber][7],
+                // "8": pickUpSimulationData[frameNumber][8],
+                // "9": pickUpSimulationData[frameNumber][9],
+                // "10": pickUpSimulationData[frameNumber][10],
+                // "11": pickUpSimulationData[frameNumber][11],
+                // "12": pickUpSimulationData[frameNumber][12],
+                // "13": pickUpSimulationData[frameNumber][13],
+                // "14": pickUpSimulationData[frameNumber][14],
+                // "15": pickUpSimulationData[frameNumber][15],
+                // "16": pickUpSimulationData[frameNumber][16],
+                // "17": pickUpSimulationData[frameNumber][17],
+                // "18": pickUpSimulationData[frameNumber][18],
+                // "19": pickUpSimulationData[frameNumber][19],
+                // "20": pickUpSimulationData[frameNumber][20],
+
             }
             console.log(response);
             espClient.forEach((element) => {

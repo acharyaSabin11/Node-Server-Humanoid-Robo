@@ -57,7 +57,7 @@ async function process_output(output, img_width, img_height) {
     }
 
     const yolo_classes = [
-        'coffee-bottle', 'backgrond'
+        'Coffee-bottle', 'backgrond'
     ];
 
     boxes = [];
@@ -87,7 +87,7 @@ async function process_output(output, img_width, img_height) {
     }
     boxes = boxes.sort((box1, box2) => box2[5] - box1[5])
     //Setting the confidence to 70 percent.
-    boxes = boxes.filter(box => box[5] > 0.70)
+    boxes = boxes.filter(box => box[5] > 0.60)
     const result = [];
     while (boxes.length > 0) {
         result.push(boxes[0]);
