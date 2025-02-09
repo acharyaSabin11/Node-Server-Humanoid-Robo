@@ -239,6 +239,7 @@ function callibrateAndSaveBoundingBoxes(body, res) {
 
         res.setHeader('Content-Type', 'application/json');
         res.send(callibratedJson);
+        passthroughUpdater('output');
 
     }
 }
