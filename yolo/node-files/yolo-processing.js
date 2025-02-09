@@ -57,7 +57,7 @@ async function process_output(output, img_width, img_height) {
     }
 
     const yolo_classes = [
-        'coffee-bottle', 'backgrond'
+        'cube'
     ];
 
     boxes = [];
