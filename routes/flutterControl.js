@@ -48,8 +48,8 @@ router.get('/distance', async (req, res, next) => {
         if (config.bothStreamDistanceBoundingBoxesCalculated) {
             let present = false;
             let distance = 0;
-            console.log('Confidence1', firstBBs[0].prob);
-            console.log('Confidence2', secondBBs[0].prob);
+            console.log('Confidence1', firstBBs[0]?.prob);
+            console.log('Confidence2', secondBBs[0]?.prob);
             distance = calcDistance(firstBBs, secondBBs);
             console.log(firstBBs.length);
             firstBBs.splice(0, firstBBs.length);
