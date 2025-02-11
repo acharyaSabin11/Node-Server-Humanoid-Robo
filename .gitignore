@@ -3,5 +3,5 @@ node_modules
 index.html
 .gitignore
 frames/*.jpg
-saved
-yolo/node-files/bck
+saved/
+yolo/node-files/bck/
