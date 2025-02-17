@@ -52,6 +52,7 @@ router.get('/distance', async (req, res, next) => {
             console.log('Confidence2', secondBBs[0].prob);
             distance = calcDistance(firstBBs, secondBBs);
             console.log(firstBBs.length);
+            //Clearing the Buffers
             firstBBs.splice(0, firstBBs.length);
             secondBBs.splice(0, secondBBs.length);
             console.log(firstBBs.length);
