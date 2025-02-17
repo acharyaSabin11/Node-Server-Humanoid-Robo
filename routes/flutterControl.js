@@ -48,8 +48,8 @@ router.get('/distance', async (req, res, next) => {
         if (config.bothStreamDistanceBoundingBoxesCalculated) {
             let present = false;
             let distance = 0;
-            console.log('Confidence1', firstBBs[0].prob);
-            console.log('Confidence2', secondBBs[0].prob);
+            console.log('Confidence1', firstBBs[0]?.prob);
+            console.log('Confidence2', secondBBs[0]?.prob);
             distance = calcDistance(firstBBs, secondBBs);
             console.log(firstBBs.length);
             //Clearing the Buffers
@@ -86,7 +86,7 @@ router.post('/', async (req, res, next) => {
     if (!(req.body.showBoundingBoxes === null)) {
         config.showBoundingBoxes = req.body.showBoundingBoxes;
     }
-    res.setHeader('Content-Type', 'aplication/json')
+    res.setHeader('Content-Type', 'application/json')
     const statusObj = {
         'Stream1': stream1Status,
         'Stream2': stream2Status,

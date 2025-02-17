@@ -3,8 +3,8 @@ const ffmpegPath = require('ffmpeg-static');
 const { config } = require('./../variables/variables')
 
 //Urls where the video is being hosted by the ESP32-CAM server.
-const videoUrl1 = 'http://192.168.254.14:81/stream';
-const videoUrl2 = 'http://192.168.254.15:81/stream';
+const videoUrl1 = 'http://192.168.101.17:81/stream';
+const videoUrl2 = 'http://192.168.101.15:81/stream';
 
 
 
