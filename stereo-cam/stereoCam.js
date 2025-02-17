@@ -3,8 +3,8 @@ const ffmpegPath = require('ffmpeg-static');
 const { config } = require('./../variables/variables')
 
 //Urls where the video is being hosted by the ESP32-CAM server.
-const videoUrl1 = 'http://192.168.101.17:81/stream';
-const videoUrl2 = 'http://192.168.101.15:81/stream';
+const videoUrl1 = 'http://192.168.254.14:81/stream';
+const videoUrl2 = 'http://192.168.254.15:81/stream';
 
 
 
@@ -51,16 +51,20 @@ function startStreaming1(frameSreamPipeline) {
     ffmpegProcess1 = ffmpeg(videoUrl1)
         .on('start', () => {
             console.log('FFmpeg process started');
+            config.stream1Status = true;
         })
         .on('stderr', (stderrLine) => {
             // console.log('FFmpeg stderr form proc 1:', stderrLine);
+            config.stream1Status = false;
         })
         .on('error', (err) => {
             console.error('An error occurred:', err.message);
+            config.stream1Status = false;
             ffmpegProcess1 = null;
         })
         .on('end', () => {
             console.log('FFmpeg process ended');
+            config.stream1Status = false;
             ffmpegProcess1 = null;
         })
         .outputOptions([
@@ -84,16 +88,20 @@ function startStreaming2(frameSreamPipeline) {
     ffmpegProcess2 = ffmpeg(videoUrl2)
         .on('start', () => {
             console.log('FFmpeg process started');
+            config.stream2Status = true;
         })
         .on('stderr', (stderrLine) => {
             // console.log('FFmpeg stderr from proc 2:', stderrLine);
+            config.stream2Status = false;
         })
         .on('error', (err) => {
             console.error('An error occurred:', err.message);
+            config.stream2Status = false;
             ffmpegProcess2 = null;
         })
         .on('end', () => {
             console.log('FFmpeg process ended');
+            config.stream2Status = false;
             ffmpegProcess2 = null;
         }).outputOptions([
             `-vf fps=${config.frameRate}`,

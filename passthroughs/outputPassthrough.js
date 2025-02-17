@@ -17,40 +17,48 @@ let counter2 = 0;
 //* ********************************************Defining Listeners for Passthroughs*******************************************************************
 outputStream1.on('data', async (data) => {
     try {
-        if (config.calculateDistance) {
-            if (counter1 < 5) {
-                counter1++;
-                let BB = await YOLO.getBoundingBoxes(data);
-                BB = BB[0];
-                if (!BB) {
-                    firstBBs.push({ x1: 0, y1: 0, x2: 0, y2: 0, prob: 0, label: 'No Object' })
+        if (config.determineObjectPresence1) {
+            let BB = await YOLO.getBoundingBoxes(data);
+            BB = BB[0];
+            config.object1Present = BB ? true : false;
+            config.determineObjectPresence1 = false;
+
+        } else {
+            if (config.calculateDistance) {
+                if (counter1 < 5) {
+                    counter1++;
+                    let BB = await YOLO.getBoundingBoxes(data);
+                    BB = BB[0];
+                    if (!BB) {
+                        firstBBs.push({ x1: 0, y1: 0, x2: 0, y2: 0, prob: 0, label: 'No Object' })
+                    }
+                    else {
+                        firstBBs.push({ x1: BB[0] ?? 0, y1: BB[1] ?? 0, x2: BB[2] ?? 0, y2: BB[3] ?? 0, label: BB[4] ?? 'No Object', prob: BB[5] ?? 0 });
+                    }
                 }
                 else {
-                    firstBBs.push({ x1: BB[0] ?? 0, y1: BB[1] ?? 0, x2: BB[2] ?? 0, y2: BB[3] ?? 0, label: BB[4] ?? 'No Object', prob: BB[5] ?? 0 });
+                    reset();
+                    config.stream1DistanceBoundingBoxesCalculated = true;
                 }
             }
-            else {
-                reset();
-                config.stream1DistanceBoundingBoxesCalculated = true;
-            }
-        }
 
-        // buffer1 = data;
-        if (!config.showBoundingBoxes) {
-            stream1.write(data);
-        } else {
-            result = await YOLO.getBoundingBoxes(data);
-            // fs.appendFile(filePath, `Frame Stream 1 Bounding Box: ${result.toString()}\n`);
-            if (result.length === 0) {
+            // buffer1 = data;
+            if (!config.showBoundingBoxes) {
                 stream1.write(data);
             } else {
-                const image = await createBoundingBoxes(data, result);
-                image.getBuffer(Jimp.MIME_JPEG, (err, buffer) => {
-                    if (err) {
-                        console.error(err);
-                    }
-                    stream1.write(buffer);
-                });
+                result = await YOLO.getBoundingBoxes(data);
+                // fs.appendFile(filePath, `Frame Stream 1 Bounding Box: ${result.toString()}\n`);
+                if (result.length === 0) {
+                    stream1.write(data);
+                } else {
+                    const image = await createBoundingBoxes(data, result);
+                    image.getBuffer(Jimp.MIME_JPEG, (err, buffer) => {
+                        if (err) {
+                            console.error(err);
+                        }
+                        stream1.write(buffer);
+                    });
+                }
             }
         }
     } catch (err) {
@@ -64,38 +72,45 @@ outputStream1.on('close', () => { console.log('Output Stream 1 Closed') })
 
 outputStream2.on('data', async (data) => {
     try {
-        if (config.calculateDistance) {
-            if (counter2 < 5) {
-                counter2++;
-                let BB = await YOLO.getBoundingBoxes(data);
-                BB = BB[0];
-                if (!BB) {
-                    secondBBs.push({ x1: 0, y1: 0, x2: 0, y2: 0, prob: 0, label: 'No Object' })
-                }
-                else {
-                    secondBBs.push({ x1: BB[0] ?? 0, y1: BB[1] ?? 0, x2: BB[2] ?? 0, y2: BB[3] ?? 0, label: BB[4] ?? 'No Object', prob: BB[5] ?? 0 });
-                }
-            } else {
-                reset();
-                config.stream2DistanceBoundingBoxesCalculated = true;
-            }
-        }
-        buffer2 = data;
-        if (!config.showBoundingBoxes) {
-            stream2.write(data);
+        if (config.determineObjectPresence2) {
+            let BB = await YOLO.getBoundingBoxes(data);
+            BB = BB[0];
+            config.object2Present = BB ? true : false;
+            config.determineObjectPresence2 = false;
         } else {
-            result = await YOLO.getBoundingBoxes(data);
-            // fs.appendFile(filePath, `Frame Stream 2 Bounding Box: ${result.toString()}\n`);
-            if (result.length === 0) {
+            if (config.calculateDistance) {
+                if (counter2 < 5) {
+                    counter2++;
+                    let BB = await YOLO.getBoundingBoxes(data);
+                    BB = BB[0];
+                    if (!BB) {
+                        secondBBs.push({ x1: 0, y1: 0, x2: 0, y2: 0, prob: 0, label: 'No Object' })
+                    }
+                    else {
+                        secondBBs.push({ x1: BB[0] ?? 0, y1: BB[1] ?? 0, x2: BB[2] ?? 0, y2: BB[3] ?? 0, label: BB[4] ?? 'No Object', prob: BB[5] ?? 0 });
+                    }
+                } else {
+                    reset();
+                    config.stream2DistanceBoundingBoxesCalculated = true;
+                }
+            }
+            buffer2 = data;
+            if (!config.showBoundingBoxes) {
                 stream2.write(data);
             } else {
-                const image = await createBoundingBoxes(data, result);
-                image.getBuffer(Jimp.MIME_JPEG, (err, buffer) => {
-                    if (err) {
-                        console.error(err);
-                    }
-                    stream2.write(buffer);
-                });
+                result = await YOLO.getBoundingBoxes(data);
+                // fs.appendFile(filePath, `Frame Stream 2 Bounding Box: ${result.toString()}\n`);
+                if (result.length === 0) {
+                    stream2.write(data);
+                } else {
+                    const image = await createBoundingBoxes(data, result);
+                    image.getBuffer(Jimp.MIME_JPEG, (err, buffer) => {
+                        if (err) {
+                            console.error(err);
+                        }
+                        stream2.write(buffer);
+                    });
+                }
             }
         }
     } catch (err) {

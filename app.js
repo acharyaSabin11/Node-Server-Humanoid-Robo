@@ -7,6 +7,7 @@ const { ForwardWalkingFrameData } = require('./motionData/ForwardWalking');
 const { LeftSideWalkSimulationData } = require('./motionData/LeftSideWalking');
 const { CounterClockwiseRotationSimulationData } = require('./motionData/CounterClockwiseRotation');
 const { pickupSimulationData } = require('./motionData/PickupSimulationData');
+const handleFinalAction = require('./final_action/final_action');
 
 //Instantiating express App
 const app = express()
@@ -49,12 +50,6 @@ const clientNames = {
     'esp': 'ESP32',
     'unity': 'Flutter Application'
 };
-
-
-
-
-
-
 
 // const walkingFrameData = {
 //     '0': [
@@ -179,7 +174,7 @@ wss.on('connection', (ws, req) => {
             let frameNumber = object.frameNumber;
             if (!frameNumber) { frameNumber = 0 };
             if (object.type === 'final_action') {
-                handleFinalAction();
+                handleFinalAction(flutterClient, espClient);
                 return;
             }
 
@@ -345,21 +340,5 @@ const motorAngleMap = {
     "16": 0,
 };
 
-function handleFinalAction() {
-    // See if there is any object in the frame. i.e. perform distance estimation
-    // If there is any object, store the distance
-    sendControlMessageToFlutter('Started the Final Action Process');
-    sendControlMessageToFlutter('Detecting Object');
-    // If there is no object, rotate the head by 10 degrees and perform distance estimation
-    // If there is any object, store the distance
-}
 
-function sendControlMessageToFlutter(message) {
-    const response = {
-        'type': 'control_info',
-        'message': message,
-    };
-    flutterClient.forEach((element) => {
-        element.send(JSON.stringify(response));
-    });
-}
+

@@ -36,7 +36,8 @@ router.post('/callibration', (req, res) => {
     // Diverting the image stream to the callibration stream.
     passthroughUpdater('callibration');
     //response is sent from this function only.
-    callibrateAndSaveBoundingBoxes(body, res)
+    callibrateAndSaveBoundingBoxes(body, res);
+    passthroughUpdater('output');
 })
 
 

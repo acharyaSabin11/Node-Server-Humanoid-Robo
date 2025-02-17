@@ -1,3 +1,4 @@
+
 let config = {
     showBoundingBoxes: false,
     frameRate: 10,
@@ -14,6 +15,13 @@ let config = {
     stream2DistanceBoundingBoxesCalculated: false,
     bothStreamDistanceBoundingBoxesCalculated: false,
     showBoundingBoxes: false,
+    stream1Status: null,
+    stream2Status: null,
+    determineObjectPresence1: false,
+    determineObjectPresence2: false,
+    object1Present: false,
+    object2Present: false,
+
 }
 
 let jsonObj = {};
