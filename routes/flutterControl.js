@@ -42,7 +42,7 @@ router.post('/callibration', (req, res) => {
 
 
 router.get('/distance', async (req, res, next) => {
-    console.log('Distance Received');
+    // console.log('Distance Received');
     config.calculateDistance = true;
     let intervalFunc = setInterval(async () => {
         console.log('Checking');

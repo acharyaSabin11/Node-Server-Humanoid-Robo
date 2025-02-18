@@ -51,6 +51,8 @@ function startStreaming1(frameSreamPipeline) {
     ffmpegProcess1 = ffmpeg(videoUrl1)
         .on('start', () => {
             console.log('FFmpeg process started');
+        })
+        .on('progress', () => {
             config.stream1Status = true;
         })
         .on('stderr', (stderrLine) => {
@@ -88,6 +90,8 @@ function startStreaming2(frameSreamPipeline) {
     ffmpegProcess2 = ffmpeg(videoUrl2)
         .on('start', () => {
             console.log('FFmpeg process started');
+        }).
+        on('progress', () => {
             config.stream2Status = true;
         })
         .on('stderr', (stderrLine) => {

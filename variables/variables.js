@@ -1,3 +1,4 @@
+const { PassThrough } = require('stream');
 
 let config = {
     showBoundingBoxes: false,
@@ -21,9 +22,10 @@ let config = {
     determineObjectPresence2: false,
     object1Present: false,
     object2Present: false,
-
 }
 
+let frameStream1 = new PassThrough();
+let frameStream2 = new PassThrough();
 let jsonObj = {};
 let firstImages = [];
 let secondImages = [];
@@ -76,4 +78,6 @@ module.exports = {
     firstBBs,
     secondBBs,
     clearBBs,
+    frameStream1,
+    frameStream2,
 }

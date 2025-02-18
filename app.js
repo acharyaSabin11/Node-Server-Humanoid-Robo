@@ -4,10 +4,13 @@ const WebSocket = require('ws');
 const http = require('http');
 const url = require('url');
 const { ForwardWalkingFrameData } = require('./motionData/ForwardWalking');
+const { BackwardWalkingFrameData } = require('./motionData/BackwardWalking');
 const { LeftSideWalkSimulationData } = require('./motionData/LeftSideWalking');
 const { CounterClockwiseRotationSimulationData } = require('./motionData/CounterClockwiseRotation');
 const { pickupSimulationData } = require('./motionData/PickupSimulationData');
 const handleFinalAction = require('./final_action/final_action');
+const { RightSideWalkSimulationData } = require('./motionData/RightSideWalking');
+const { ClockwiseRotationSimulationData } = require('./motionData/ClockwiseRotationData');
 
 //Instantiating express App
 const app = express()
@@ -51,75 +54,6 @@ const clientNames = {
     'unity': 'Flutter Application'
 };
 
-// const walkingFrameData = {
-//     '0': [
-//         10.0, 35.0, 0.0,
-//         10.0, -35.0, 0.0,
-//         0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-//         0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-//         0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-//         0.0, 0.0,
-//         0.88
-//     ],
-//     '1': [
-//         10.0, 35.0, 0.0,
-//         10.0, -35.0, 0.0,
-//         0.0, 10.0, 0.0, 0.0, 0.0, -12.0,
-//         0.0, 10.0, 0.0, 0.0, 0.0, -12.0,
-//         0.0, 0.0,
-//         0.4
-//     ],
-
-//     '2': [
-//         10.0, 35.0, 0.0,
-//         10.0, -35.0, 0.0,
-//         0.0, 10.0, 35.8, -60.5, 29.4, -12.0,
-//         0.0, 10.0, 0.0, 0.0, 0.0, -12.0,
-//         0.0, 0.0,
-//         1.0
-//     ],
-//     '3': [
-//         10.0, 35.0, 0.0,
-//         10.0, -35.0, 0.0,
-//         0.0, -10.0, 26.8, -60.5, 20.4, -12.0,
-//         0.0, -10.0, 0.0, 0.0, 0.0, -14.0,
-//         0.0, 0.0,
-//         0.64
-//     ],
-//     '4': [
-//         10.0, 35.0, 0.0,
-//         10.0, -35.0, 0.0,
-//         0.0, -11.0, 25.5, -29.8, 9.6, 12.0,
-//         0.0, -10.0, 1.5, -16.5, 22.7, 12.0,
-//         0.0, 0.0,
-//         1.5
-//     ],
-//     '5': [
-//         10.0, 35.0, 0.0,
-//         10.0, -35.0, 0.0,
-//         0.0, -8.0, 0.0, 0.0, 0.0, 12.0,
-//         0.0, -10.0, 4.8, -60.5, 29.4, 12.0,
-//         0.0, 0.0,
-//         1.0
-//     ],
-//     '6': [
-//         10.0, 35.0, 0.0,
-//         10.0, -35.0, 0.0,
-//         0.0, -8.0, 0.0, 0.0, 0.0, 8.5,
-//         0.0, -8.0, 38.5, -40.2, 2.7, 8.2,
-//         0.0, 0.0,
-//         1.52
-//     ],
-//     '7': [
-//         10.0, 35.0, 0.0,
-//         10.0, -35.0, 0.0,
-//         0.0, 8.0, 1.5, -16.5, 22.7, -10.0,
-//         0.0, 8.0, 25.5, -29.8, 9.6, -10.0,
-//         0.0, 0.0,
-//         1.52
-//     ],
-// }
-
 const espClient = [];
 const flutterClient = [];
 
@@ -161,9 +95,9 @@ wss.on('connection', (ws, req) => {
             const jsonSeralizedData = message.toString();
             console.log(jsonSeralizedData);
             // // const rawData = JSON.parse(jsonSeralizedData);
-            flutterClient.forEach((element) => {
-                element.send(jsonSeralizedData);
-            })
+            // flutterClient.forEach((element) => {
+            //     element.send(jsonSeralizedData);
+            // })
         } else if (ws.apiKey == apiKeys.FlutterClient) {
             // unityReady = true;
             console.log('Flutter application is sending message');
@@ -211,6 +145,28 @@ wss.on('connection', (ws, req) => {
                         response["18"] = ForwardWalkingFrameData[frameNumber][18];
                         response["19"] = ForwardWalkingFrameData[frameNumber][19];
                         break;
+                    case 'Backward Walking Motion':
+                        response["0"] = BackwardWalkingFrameData[frameNumber][0];
+                        response["1"] = BackwardWalkingFrameData[frameNumber][1];
+                        response["2"] = BackwardWalkingFrameData[frameNumber][2];
+                        response["3"] = BackwardWalkingFrameData[frameNumber][3];
+                        response["4"] = BackwardWalkingFrameData[frameNumber][4];
+                        response["5"] = BackwardWalkingFrameData[frameNumber][5];
+                        response["6"] = BackwardWalkingFrameData[frameNumber][6];
+                        response["7"] = BackwardWalkingFrameData[frameNumber][7];
+                        response["8"] = BackwardWalkingFrameData[frameNumber][8];
+                        response["9"] = BackwardWalkingFrameData[frameNumber][9];
+                        response["10"] = BackwardWalkingFrameData[frameNumber][10];
+                        response["11"] = BackwardWalkingFrameData[frameNumber][11];
+                        response["12"] = BackwardWalkingFrameData[frameNumber][12];
+                        response["13"] = BackwardWalkingFrameData[frameNumber][13];
+                        response["14"] = BackwardWalkingFrameData[frameNumber][14];
+                        response["15"] = BackwardWalkingFrameData[frameNumber][15];
+                        response["16"] = BackwardWalkingFrameData[frameNumber][16];
+                        response["17"] = BackwardWalkingFrameData[frameNumber][17];
+                        response["18"] = BackwardWalkingFrameData[frameNumber][18];
+                        response["19"] = BackwardWalkingFrameData[frameNumber][19];
+                        break;
                     case 'Left Side Walking Motion':
                         response["0"] = LeftSideWalkSimulationData[frameNumber][0];
                         response["1"] = LeftSideWalkSimulationData[frameNumber][1];
@@ -255,6 +211,51 @@ wss.on('connection', (ws, req) => {
                         response["18"] = CounterClockwiseRotationSimulationData[frameNumber][18];
                         response["19"] = CounterClockwiseRotationSimulationData[frameNumber][19];
                         break;
+                    case 'Right Side Walking Motion':
+                        response["0"] = RightSideWalkSimulationData[frameNumber][0];
+                        response["1"] = RightSideWalkSimulationData[frameNumber][1];
+                        response["2"] = RightSideWalkSimulationData[frameNumber][2];
+                        response["3"] = RightSideWalkSimulationData[frameNumber][3];
+                        response["4"] = RightSideWalkSimulationData[frameNumber][4];
+                        response["5"] = RightSideWalkSimulationData[frameNumber][5];
+                        response["6"] = RightSideWalkSimulationData[frameNumber][6];
+                        response["7"] = RightSideWalkSimulationData[frameNumber][7];
+                        response["8"] = RightSideWalkSimulationData[frameNumber][8];
+                        response["9"] = RightSideWalkSimulationData[frameNumber][9];
+                        response["10"] = RightSideWalkSimulationData[frameNumber][10];
+                        response["11"] = RightSideWalkSimulationData[frameNumber][11];
+                        response["12"] = RightSideWalkSimulationData[frameNumber][12];
+                        response["13"] = RightSideWalkSimulationData[frameNumber][13];
+                        response["14"] = RightSideWalkSimulationData[frameNumber][14];
+                        response["15"] = RightSideWalkSimulationData[frameNumber][15];
+                        response["16"] = RightSideWalkSimulationData[frameNumber][16];
+                        response["17"] = RightSideWalkSimulationData[frameNumber][17];
+                        response["18"] = RightSideWalkSimulationData[frameNumber][18];
+                        response["19"] = RightSideWalkSimulationData[frameNumber][19];
+                        break;
+                    case 'Clockwise Rotation Motion':
+                        response["0"] = ClockwiseRotationSimulationData[frameNumber][0];
+                        response["1"] = ClockwiseRotationSimulationData[frameNumber][1];
+                        response["2"] = ClockwiseRotationSimulationData[frameNumber][2];
+                        response["3"] = ClockwiseRotationSimulationData[frameNumber][3];
+                        response["4"] = ClockwiseRotationSimulationData[frameNumber][4];
+                        response["5"] = ClockwiseRotationSimulationData[frameNumber][5];
+                        response["6"] = ClockwiseRotationSimulationData[frameNumber][6];
+                        response["7"] = ClockwiseRotationSimulationData[frameNumber][7];
+                        response["8"] = ClockwiseRotationSimulationData[frameNumber][8];
+                        response["9"] = ClockwiseRotationSimulationData[frameNumber][9];
+                        response["10"] = ClockwiseRotationSimulationData[frameNumber][10];
+                        response["11"] = ClockwiseRotationSimulationData[frameNumber][11];
+                        response["12"] = ClockwiseRotationSimulationData[frameNumber][12];
+                        response["13"] = ClockwiseRotationSimulationData[frameNumber][13];
+                        response["14"] = ClockwiseRotationSimulationData[frameNumber][14];
+                        response["15"] = ClockwiseRotationSimulationData[frameNumber][15];
+                        response["16"] = ClockwiseRotationSimulationData[frameNumber][16];
+                        response["17"] = ClockwiseRotationSimulationData[frameNumber][17];
+                        response["18"] = ClockwiseRotationSimulationData[frameNumber][18];
+                        response["19"] = ClockwiseRotationSimulationData[frameNumber][19];
+                        break;
+
                     case 'Pickup Motion':
                         console.log(pickupSimulationData);
                         response["0"] = pickupSimulationData[frameNumber][0];
@@ -279,26 +280,26 @@ wss.on('connection', (ws, req) => {
                         response["19"] = pickupSimulationData[frameNumber][19];
                         break;
                     default:
-                        response["0"] = pickupSimulationData[frameNumber][0];
-                        response["1"] = pickupSimulationData[frameNumber][1];
-                        response["2"] = pickupSimulationData[frameNumber][2];
-                        response["3"] = pickupSimulationData[frameNumber][3];
-                        response["4"] = pickupSimulationData[frameNumber][4];
-                        response["5"] = pickupSimulationData[frameNumber][5];
-                        response["6"] = pickupSimulationData[frameNumber][6];
-                        response["7"] = pickupSimulationData[frameNumber][7];
-                        response["8"] = pickupSimulationData[frameNumber][8];
-                        response["9"] = pickupSimulationData[frameNumber][9];
-                        response["10"] = pickupSimulationData[frameNumber][10];
-                        response["11"] = pickupSimulationData[frameNumber][11];
-                        response["12"] = pickupSimulationData[frameNumber][12];
-                        response["13"] = pickupSimulationData[frameNumber][13];
-                        response["14"] = pickupSimulationData[frameNumber][14];
-                        response["15"] = pickupSimulationData[frameNumber][15];
-                        response["16"] = pickupSimulationData[frameNumber][16];
-                        response["17"] = pickupSimulationData[frameNumber][17];
-                        response["18"] = pickupSimulationData[frameNumber][18];
-                        response["19"] = pickupSimulationData[frameNumber][19];
+                        response["0"] = BackwardWalkingFrameData[frameNumber][0];
+                        response["1"] = BackwardWalkingFrameData[frameNumber][1];
+                        response["2"] = BackwardWalkingFrameData[frameNumber][2];
+                        response["3"] = BackwardWalkingFrameData[frameNumber][3];
+                        response["4"] = BackwardWalkingFrameData[frameNumber][4];
+                        response["5"] = BackwardWalkingFrameData[frameNumber][5];
+                        response["6"] = BackwardWalkingFrameData[frameNumber][6];
+                        response["7"] = BackwardWalkingFrameData[frameNumber][7];
+                        response["8"] = BackwardWalkingFrameData[frameNumber][8];
+                        response["9"] = BackwardWalkingFrameData[frameNumber][9];
+                        response["10"] = BackwardWalkingFrameData[frameNumber][10];
+                        response["11"] = BackwardWalkingFrameData[frameNumber][11];
+                        response["12"] = BackwardWalkingFrameData[frameNumber][12];
+                        response["13"] = BackwardWalkingFrameData[frameNumber][13];
+                        response["14"] = BackwardWalkingFrameData[frameNumber][14];
+                        response["15"] = BackwardWalkingFrameData[frameNumber][15];
+                        response["16"] = BackwardWalkingFrameData[frameNumber][16];
+                        response["17"] = BackwardWalkingFrameData[frameNumber][17];
+                        response["18"] = BackwardWalkingFrameData[frameNumber][18];
+                        response["19"] = BackwardWalkingFrameData[frameNumber][19];
                         break;
                 }
             }

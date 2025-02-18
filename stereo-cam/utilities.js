@@ -12,18 +12,23 @@ function getParameters() {
 getParameters();
 
 function calcDistance(boundingBoxes1, boundingBoxes2) {
-    let pix1 = avgCenterCalculator(boundingBoxes1);
-    let pix2 = avgCenterCalculator(boundingBoxes2);
-    console.log("pix1:", pix1)
-    console.log("pix2:", pix2)
-    let p = Math.abs(pix1 - pix2);
-    console.log("p", p);
-    console.log("f", f);
-    console.log("tantheta", tantheta);
-    console.log("dc", dc);
-    console.log("N", N);
-    distance = f + (N * dc) / (2 * p * tantheta)
-    return distance;
+    try {
+        let pix1 = avgCenterCalculator(boundingBoxes1);
+        let pix2 = avgCenterCalculator(boundingBoxes2);
+        console.log("pix1:", pix1)
+        console.log("pix2:", pix2)
+        let p = Math.abs(pix1 - pix2);
+        console.log("p", p);
+        console.log("f", f);
+        console.log("tantheta", tantheta);
+        console.log("dc", dc);
+        console.log("N", N);
+        distance = f + (N * dc) / (2 * p * tantheta)
+        return distance;
+    } catch (error) {
+        console.log(error);
+        return 0;
+    }
 }
 
 function avgCenterCalculator(list) {

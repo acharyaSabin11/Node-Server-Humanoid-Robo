@@ -1,11 +1,10 @@
-const { PassThrough } = require('stream');
+
 const { outputStream1, outputStream2 } = require('./../passthroughs/outputPassthrough');
 const { saveImageStream1, saveImageStream2 } = require('./../passthroughs/imageSavePassthrough');
 const { callibrationStream1, callibrationStream2, } = require('./../passthroughs/callibationPassthrough');
-const { config } = require('./../variables/variables');
+const { config, frameStream1, frameStream2 } = require('./../variables/variables');
 
-let frameStream1 = new PassThrough();
-let frameStream2 = new PassThrough();
+
 
 
 //* ********************************************Defining Listeners for Passthroughs*******************************************************************

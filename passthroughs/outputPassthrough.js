@@ -20,7 +20,7 @@ outputStream1.on('data', async (data) => {
         if (config.determineObjectPresence1) {
             let BB = await YOLO.getBoundingBoxes(data);
             BB = BB[0];
-            config.object1Present = BB ? true : false;
+            config.object1Present = BB;
             config.determineObjectPresence1 = false;
 
         } else {
@@ -75,7 +75,7 @@ outputStream2.on('data', async (data) => {
         if (config.determineObjectPresence2) {
             let BB = await YOLO.getBoundingBoxes(data);
             BB = BB[0];
-            config.object2Present = BB ? true : false;
+            config.object2Present = BB;
             config.determineObjectPresence2 = false;
         } else {
             if (config.calculateDistance) {
