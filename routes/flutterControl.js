@@ -37,7 +37,7 @@ router.post('/callibration', (req, res) => {
     passthroughUpdater('callibration');
     //response is sent from this function only.
     callibrateAndSaveBoundingBoxes(body, res);
-    passthroughUpdater('output');
+    // passthroughUpdater('output');
 })
 
 

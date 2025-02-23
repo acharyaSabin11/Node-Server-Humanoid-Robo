@@ -24,6 +24,9 @@ function calcDistance(boundingBoxes1, boundingBoxes2) {
         console.log("dc", dc);
         console.log("N", N);
         distance = f + (N * dc) / (2 * p * tantheta)
+        if (distance === Infinity) {
+            return 0;
+        }
         return distance;
     } catch (error) {
         console.log(error);

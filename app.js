@@ -280,26 +280,26 @@ wss.on('connection', (ws, req) => {
                         response["19"] = pickupSimulationData[frameNumber][19];
                         break;
                     default:
-                        response["0"] = BackwardWalkingFrameData[frameNumber][0];
-                        response["1"] = BackwardWalkingFrameData[frameNumber][1];
-                        response["2"] = BackwardWalkingFrameData[frameNumber][2];
-                        response["3"] = BackwardWalkingFrameData[frameNumber][3];
-                        response["4"] = BackwardWalkingFrameData[frameNumber][4];
-                        response["5"] = BackwardWalkingFrameData[frameNumber][5];
-                        response["6"] = BackwardWalkingFrameData[frameNumber][6];
-                        response["7"] = BackwardWalkingFrameData[frameNumber][7];
-                        response["8"] = BackwardWalkingFrameData[frameNumber][8];
-                        response["9"] = BackwardWalkingFrameData[frameNumber][9];
-                        response["10"] = BackwardWalkingFrameData[frameNumber][10];
-                        response["11"] = BackwardWalkingFrameData[frameNumber][11];
-                        response["12"] = BackwardWalkingFrameData[frameNumber][12];
-                        response["13"] = BackwardWalkingFrameData[frameNumber][13];
-                        response["14"] = BackwardWalkingFrameData[frameNumber][14];
-                        response["15"] = BackwardWalkingFrameData[frameNumber][15];
-                        response["16"] = BackwardWalkingFrameData[frameNumber][16];
-                        response["17"] = BackwardWalkingFrameData[frameNumber][17];
-                        response["18"] = BackwardWalkingFrameData[frameNumber][18];
-                        response["19"] = BackwardWalkingFrameData[frameNumber][19];
+                        response["0"] = ForwardWalkingFrameData[frameNumber][0];
+                        response["1"] = ForwardWalkingFrameData[frameNumber][1];
+                        response["2"] = ForwardWalkingFrameData[frameNumber][2];
+                        response["3"] = ForwardWalkingFrameData[frameNumber][3];
+                        response["4"] = ForwardWalkingFrameData[frameNumber][4];
+                        response["5"] = ForwardWalkingFrameData[frameNumber][5];
+                        response["6"] = ForwardWalkingFrameData[frameNumber][6];
+                        response["7"] = ForwardWalkingFrameData[frameNumber][7];
+                        response["8"] = ForwardWalkingFrameData[frameNumber][8];
+                        response["9"] = ForwardWalkingFrameData[frameNumber][9];
+                        response["10"] = ForwardWalkingFrameData[frameNumber][10];
+                        response["11"] = ForwardWalkingFrameData[frameNumber][11];
+                        response["12"] = ForwardWalkingFrameData[frameNumber][12];
+                        response["13"] = ForwardWalkingFrameData[frameNumber][13];
+                        response["14"] = ForwardWalkingFrameData[frameNumber][14];
+                        response["15"] = ForwardWalkingFrameData[frameNumber][15];
+                        response["16"] = ForwardWalkingFrameData[frameNumber][16];
+                        response["17"] = ForwardWalkingFrameData[frameNumber][17];
+                        response["18"] = ForwardWalkingFrameData[frameNumber][18];
+                        response["19"] = ForwardWalkingFrameData[frameNumber][19];
                         break;
                 }
             }
