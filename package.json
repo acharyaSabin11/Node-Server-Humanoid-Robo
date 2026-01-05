@@ -10,8 +10,8 @@
   "author": "Sabin Acharya",
   "license": "ISC",
   "dependencies": {
-    "body-parser": "^1.20.2",
-    "express": "^4.19.2",
+    "body-parser": "^1.20.4",
+    "express": "^4.22.0",
     "ffmpeg": "^0.0.4",
     "ffmpeg-static": "^5.2.0",
     "fluent-ffmpeg": "^2.1.3",
